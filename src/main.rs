@@ -21,6 +21,7 @@ fn main() -> anyhow::Result<()> {
 
     let options = LaunchOptionsBuilder::default()
         .enable_logging(true)
+        // .sandbox(false)
         .port(Some(8000))
         .idle_browser_timeout(Duration::from_secs(10))
         .build()
