@@ -1,5 +1,7 @@
 use headless_chrome::{Browser, LaunchOptionsBuilder};
-use std::env;
+use std::{env, time::Duration};
+use tracing_log::LogTracer;
+use tracing_subscriber::FmtSubscriber;
 
 fn main() -> anyhow::Result<()> {
     let args: Vec<String> = env::args().collect();
@@ -8,9 +10,16 @@ fn main() -> anyhow::Result<()> {
         std::process::exit(1);
     }
 
+    let subscriber = FmtSubscriber::builder().finish();
+    tracing::subscriber::set_global_default(subscriber).expect("Error setting global default");
+
+    LogTracer::init()?;
+
     let url = &args[1];
 
     let options = LaunchOptionsBuilder::default()
+        .enable_logging(true)
+        .idle_browser_timeout(Duration::from_secs(10))
         .build()
         .expect("Default should not panic");
     let browser = Browser::new(options)?;
