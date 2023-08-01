@@ -10,7 +10,9 @@ fn main() -> anyhow::Result<()> {
         std::process::exit(1);
     }
 
-    let subscriber = FmtSubscriber::builder().finish();
+    let subscriber = FmtSubscriber::builder()
+        .with_max_level(tracing::Level::TRACE)
+        .finish();
     tracing::subscriber::set_global_default(subscriber).expect("Error setting global default");
 
     LogTracer::init()?;
@@ -19,6 +21,7 @@ fn main() -> anyhow::Result<()> {
 
     let options = LaunchOptionsBuilder::default()
         .enable_logging(true)
+        .port(Some(8000))
         .idle_browser_timeout(Duration::from_secs(10))
         .build()
         .expect("Default should not panic");

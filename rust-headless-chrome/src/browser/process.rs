@@ -244,6 +244,10 @@ impl Process {
         let url;
         let mut attempts = 0;
         loop {
+            debug!(
+                "Trying to find available debugging port. Attempts: {}",
+                attempts
+            );
             if attempts > 10 {
                 return Err(ChromeLaunchError::NoAvailablePorts {}.into());
             }
